@@ -151,7 +151,7 @@ static void read_stream(const char c)
 
     if (c == 10 || c == 13) {
         if (cmd.length() >= 2) {
-#ifdef SERIAL_DEBU
+#ifdef SERIAL_DEBUG
             for (int i = 0; i < cmd.length(); ++i) {
                 g_server.println(cmd.charAt(i), DEC);
             }
@@ -225,8 +225,6 @@ void dht_get_data()
 #ifdef SERIAL_DEBUG
         Serial.println("read new sensor data");
 #endif
-        g_server.println(dht_umid);
-        g_server.println(dht_temp);
         sensors_event_t event;
         dht.temperature().getEvent(&event);
         
