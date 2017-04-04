@@ -8,7 +8,7 @@
  *  - Used Arduino Ethernet or
  *  - Arduino Uno + Ethernet shield uses pins 4, 10, 11, 12, 13
  *  - DHT22 sensor use pin 5, VCC and GND
- *  
+ * 
  * Required external libraries:
  *   - DHT Sensors https://github.com/adafruit/DHT-sensor-library
  *****************************************************************************/
@@ -37,7 +37,7 @@ EthernetServer g_server(10050);
 EthernetClient g_client;
 
 #define DHT_PIN            5         // Pin which is connected to the DHT sensor
-//#define DHT_TYPE         DHT11     // DHT 11 
+//#define DHT_TYPE         DHT11     // DHT 11
 //#define DHT_TYPE         DHT21     // DHT 21 (AM2301)
 #define DHT_TYPE           DHT22     // DHT 22 (AM2302)
 
@@ -62,7 +62,7 @@ void setup()
 #ifdef SERIAL_DEBUG
     Serial.begin(9600);
     Serial.println("Setup");
-#endif    
+#endif
 
     // Set watchdog to 8 seconds.
     watchdog_setup();
@@ -75,16 +75,16 @@ void setup()
 
     do {
         dhcp_return = Ethernet.begin(mac);
-        
+
         if (dhcp_return == 1) {
             f_dhcp_done = true;
 #ifdef SERIAL_DEBUG
             Serial.println(Ethernet.localIP());
 #endif
         } else {
-            // Too bad, DHCP server did not provided a valid IP address.            
+            // Too bad, DHCP server did not provided a valid IP address.
             delay(5000);
-#ifdef SERIAL_DEBUG            
+#ifdef SERIAL_DEBUG
             Serial.println(num_dhcp_tries);
 #endif
         }
@@ -106,7 +106,7 @@ void setup()
 }
 
 /************************************************************************************
- * Description: Read data, check WDT and manage client connection. 
+ * Description: Read data, check WDT and manage client connection.
  * Notes:
  ************************************************************************************/
 void loop()
@@ -121,11 +121,11 @@ void loop()
     eth_maintain = Ethernet.maintain();
 #endif
 
-    if (g_client) {        
+    if (g_client) {
         if (!cli_connected) {
             cli_connected = true;
         }
-    
+
         int to_read = g_client.available();
         if (to_read > 0) {
             read_stream(g_client.read());
@@ -173,12 +173,12 @@ void parse_command(void)
     g_server.println(cmd);
     g_server.println(cmd.length());
 #endif
- 
+
     if (cmd.equals("agent.ping")) {
         g_server.println("pong");
 #ifdef SERIAL_DEBUG
         Serial.println("pong");
-#endif        
+#endif     
     } else if (cmd.equals("agent.version")) {
         g_server.println("Arduino Zabbix Agent 0.1");
 #ifdef SERIAL_DEBUG
@@ -188,7 +188,7 @@ void parse_command(void)
         g_server.println(dht_temp);
 #ifdef SERIAL_DEBUG
         Serial.println(dht_temp);
-#endif        
+#endif     
     } else if (cmd.equals("agent.umid")) {
         g_server.println(dht_umid);
 #ifdef SERIAL_DEBUG
@@ -203,13 +203,17 @@ void parse_command(void)
         g_server.println("closed");
 #ifdef SERIAL_DEBUG
         Serial.println("closed");
-#endif        
+#endif     
         g_client.stop();
-        cli_connected = false;
-        
+        cli_connected = false;     
     } else { // Agent error
         g_server.println("Invalid command");
     }
+
+    // Zabbix prefers that the connection is closed after each command.
+    // FIXME, needs more testing.
+    g_client.stop();
+    cli_connected = false;
 }
 
 /************************************************************************************
@@ -227,7 +231,7 @@ void dht_get_data()
 #endif
         sensors_event_t event;
         dht.temperature().getEvent(&event);
-        
+
         if (isnan(event.temperature)) {
 #ifdef SERIAL_DEBUG
             Serial.println("Error reading temperature!");
@@ -244,7 +248,7 @@ void dht_get_data()
 
         // Get humidity event and print its value.
         dht.humidity().getEvent(&event);
-        
+
         if (isnan(event.relative_humidity)) {
 #ifdef SERIAL_DEBUG
             Serial.println("Error reading humidity!");
@@ -275,7 +279,7 @@ void watchdog_setup(void)
     // Reset watchdog timer.
     wdt_reset();
     /*
-    WDTCSR configuration: 
+    WDTCSR configuration:
     WDIE = 1 :Interrupt Enable
     WDE  = 1 :Reset Enable
     See table for time-out variations:
@@ -330,7 +334,7 @@ void wdt_b(void)
  * Notes:
  ************************************************************************************/
 void halt(void)
-{  
+{
     // Stays here waiting system to reset to avoid more trouble.
     while (1);
 }
