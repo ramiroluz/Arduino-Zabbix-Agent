@@ -27,7 +27,9 @@ It's a Zabbix Agent tested and running successfully.
 
 ## Schematic:
 Connect DS18B20 VCC pin to Arduino 5V, DS18B20 GND pin to Arduino GND
-and DS18B20 Data pin to Arduino pin 2.
+and DS18B20 Data pin to Arduino pin 3.
+
+[schema.jpg]
 
 ### More info:
 
@@ -62,5 +64,5 @@ Check how many sensors will be used and add them to the code if necessary. To do
 
 __*Pins 10, 11, 12 and 13 cannot be used. They are used by the ethernet shield*.__
 
-Pin 2 is reserved for the DS18B20.
+Pin 3 is reserved for the DS18B20.
 

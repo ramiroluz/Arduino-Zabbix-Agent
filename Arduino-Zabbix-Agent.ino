@@ -35,8 +35,8 @@ IPAddress subnet(255, 255, 255, 0);
 EthernetServer g_server(10050);
 EthernetClient g_client;
 
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 2
+// Data wire is plugged into port 3 on the Arduino
+#define ONE_WIRE_BUS 3
 
 boolean cli_connected = false;  // Controll if client is connected
 double dht_temp = 0;            // Temperature (Celsius)
@@ -216,8 +216,6 @@ void parse_command(void)
     g_server.println("Invalid command");
   }
 
-    // Zabbix prefers that the connection is closed after each command.
-    // FIXME, needs more testing.
     g_client.stop();
   cli_connected = false;
 }
