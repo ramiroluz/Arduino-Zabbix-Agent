@@ -7,7 +7,7 @@ It's a Zabbix Agent tested and running successfully.
 * [Materials](#materials)
 * [Schematic](#schematic)
 * [More info](#more-info)
-  * [DHT22](#dht22)
+  * [DS18B20](#ds18b20)
   * [Observations](#observation)
 * [How to use](#how-to-use)
 * [Keys used on Zabbix](#keys-used-on-zabbix)
@@ -21,25 +21,20 @@ It's a Zabbix Agent tested and running successfully.
 - Arduino Uno v3
 - Ethernet Shield
 - Arduino Sensor Shield*
-- DHT22 (or similar) and one 10k resistor
+- DS18B20 sensor and a 4.7 k ohms resistor.
 
 ###### *A new shield may be built by yourself.
 
 ## Schematic:
-Connect DHT22 VCC pin to Arduino 3.3V, DHT22 GND pin to Arduino GND
-and DHT Data pin to Arduino pin 5.
+Connect DS18B20 VCC pin to Arduino 5V, DS18B20 GND pin to Arduino GND
+and DS18B20 Data pin to Arduino pin 2.
 
 ### More info:
 
-#### `DHT22`
-This sensor can measure the air temperature and humidity. It doesn't need to be calibrated. It is recommended to take 1 sample per second or less. It returns one `int` for each data. The temperature is in Celsius. A 10k resistor must be connected to pins Vcc and Signal.
+#### `DS18B20`
+The DS18B20 is a so called 1-wire digital temperature sensor. The words “digital” and “1-wire” make this sensor really cool and allows you, with a super simple setup, to read the temperature of one or more sensors. You can even connect multiple devices together, utilizing only one pin on your Arduino.
 
-### Observations:
-All temperature are in Celsius.
-To convert to Fahrenheit:
-```
-Temp F = 1.8*(Temp C) + 32
-```
+https://www.tweaking4all.com/hardware/arduino/arduino-ds18b20-temperature-sensor/
 
 ## How to use:
 
@@ -47,14 +42,13 @@ Check pins used.
 Upload the code to the Arduino.
 Add an item on Zabbix Server.
  - Type: Zabbix agent.
- - Key: The key for each sensor (`q`, `w`, `e`, `r`, `t` etc).
+ - Key: The key (commands) for each sensor (`agent.temp`, `agent.ping`, etc).
  - It is recommended to check each item on not less than once a minute.
 
 ## Keys used on Zabbix:
 
-* q - soil humidity
-* w - air temperature on DHT11
-* e - air humidity on DHT11
+* agent.temp - Temperature in celsius
+* agent.ping - Check to get a pong response
 
 ## On the code:
 
@@ -68,5 +62,5 @@ Check how many sensors will be used and add them to the code if necessary. To do
 
 __*Pins 10, 11, 12 and 13 cannot be used. They are used by the ethernet shield*.__
 
-Pin 5 is reserved for the DHT22.
+Pin 2 is reserved for the DS18B20.
 
