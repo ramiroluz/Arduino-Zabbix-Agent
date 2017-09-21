@@ -29,7 +29,7 @@ It's a Zabbix Agent tested and running successfully.
 Connect DS18B20 VCC pin to Arduino 5V, DS18B20 GND pin to Arduino GND
 and DS18B20 Data pin to Arduino pin 3.
 
-[schema.jpg]
+![Arduino shield schema picture](schema.jpg)
 
 ### More info:
 
